@@ -1,0 +1,12 @@
+# The dsh-desktop-shell-plus bundle patch.
+#
+# Adding `dsh-desktop-shell-plus` to a profile's `dsh.profile.bundles` applies this
+# automatically: the host half exposes /api/desktop-plus/{status,apply} and, on every boot,
+# brings the dsh-desktop-shell launcher and the right-side panel back in line with the
+# patched versions (both are idempotent and cheap once applied).
+#
+# The entry name is the BARE package name — the client-module scanner resolves
+# `<name>/package.json`, so a subpath would be cached as "not a client package".
+- insert:
+    - id: desktop-plus
+      name: dsh-desktop-shell-plus

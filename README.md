@@ -81,10 +81,54 @@ clampWidth(rightbar, 300, viewport * RIGHTBAR_MAX_RATIO)            // → 280
 - 已安装 `dsh-desktop-shell`：`dsh plugin --profile web add dsh-desktop-shell`
 - 编译用 legacy csc，不需要装 SDK：`C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe`
 
-## 用法
+## 安装
+
+前置：先装外壳本体，否则本插件没有东西可补。
+
+```powershell
+dsh plugin --profile web add dsh-desktop-shell
+```
+
+然后二选一：
+
+```powershell
+# A. 直接从仓库装（pnpm 走 git）
+dsh plugin --profile web add https://github.com/Broknsun/dsh-desktop-shell-plus
+
+# B. 用发布包里的预构建 tarball（免构建授权）
+dsh plugin --profile web add https://github.com/Broknsun/dsh-desktop-shell-plus/releases/download/v1.0.0/dsh-desktop-shell-plus-1.0.0.tgz
+```
+
+装完**重启后端**。之后每次启动，插件会用 `scripts/` 里的脚本把两件事重新对齐一遍（幂等，已经是对的
+就什么都不做）：
+
+- 启动器：`src/DSHLauncher.patched.cs` 比现有构建新、或者还没有构建时，才重新编译并重指快捷方式；
+- 右栏：`dsh-client-ui-layout` 回到 45% 就再压回 20%。
+
+### 接口
+
+插件在宿主进程里注册两个 loopback-only 路由：
+
+```
+GET  /api/desktop-plus/status   -> 安装位置、当前构建、右栏补丁状态、编译器/冻结标记
+POST /api/desktop-plus/apply    -> 立刻重放补丁（body: {"launcher":true,"rightbar":true,"shortcuts":true}）
+```
+
+```powershell
+curl http://127.0.0.1:3080/api/desktop-plus/status
+curl -X POST http://127.0.0.1:3080/api/desktop-plus/apply -H "content-type: application/json" -d "{}"
+```
+
+插件**不下载任何东西**：改过的启动器源码和三个脚本都在包里，编译用系统自带的
+`C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe`。
+
+## 手动脚本（不想装插件时）
+
+三个脚本都**幂等**，重复执行输出 `already patched` 之类的提示，不会重复改。
 
 ```powershell
 # 0) 先让插件把 home 目录铺好（装完后端跑一次，或直接调 install 接口）
+```
 
 # 1) 编译补丁启动器 + 把已有快捷方式指过去
 powershell -ExecutionPolicy Bypass -File .\scripts\rebuild-launcher.ps1

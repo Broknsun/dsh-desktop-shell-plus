@@ -1,0 +1,50 @@
+{
+  "name": "dsh-desktop-shell-plus",
+  "version": "1.0.0",
+  "description": "Patch the dsh-desktop-shell WebView2 launcher for high-DPI Windows and narrow the right-side panel: dark branded splash, per-monitor DPI awareness, dark caption, window bounds memory, F12 DevTools, right panel 45% -> 20%.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Broknsun",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Broknsun/dsh-desktop-shell-plus.git"
+  },
+  "homepage": "https://github.com/Broknsun/dsh-desktop-shell-plus#readme",
+  "bugs": {
+    "url": "https://github.com/Broknsun/dsh-desktop-shell-plus/issues"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "dsh",
+    "desktop",
+    "launcher",
+    "webview2",
+    "dpi",
+    "theme",
+    "windows"
+  ],
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "scripts",
+    "src",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "engines": {
+      "dsh": ">=0.1.5-rc.1"
+    }
+  }
+}
