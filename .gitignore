@@ -1,0 +1,19 @@
+# build output
+*.exe
+*.dll
+*.pdb
+
+# local state
+build-name.txt
+.selftest/
+logs/
+window.json
+launcher.config.json
+launcher.state.json
+.shortcuts-frozen
+
+# editor / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
